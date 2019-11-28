@@ -1,0 +1,30 @@
+{
+    "name": "@oct16/code-formatter",
+    "version": "1.0.0",
+    "author": "oct16",
+    "description": "a code automatically formatter",
+    "contributes": {
+        "name": "oct16",
+        "email": "mail@fengfan.me"
+    },
+    "main": "index.js",
+    "scripts": {
+        "start": "ts-node index.ts"
+    },
+    "license": "ISC",
+    "devDependencies": {
+        "@types/node": "^12.12.14",
+        "@types/prettier": "^1.19.0",
+        "prettier": "^1.19.1",
+        "tslint-config-prettier": "^1.18.0",
+        "@types/yargs": "^13.0.3",
+        "chalk": "^3.0.0",
+        "cli-progress": "^3.4.0",
+        "cli-table2": "^0.2.0",
+        "ora": "^4.0.3",
+        "ts-node": "^8.5.2",
+        "typescript": "^3.7.2",
+        "yargs": "^15.0.2"
+    },
+    "dependencies": {}
+}

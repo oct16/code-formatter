@@ -1,0 +1,28 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended",
+        "tslint-config-prettier"
+    ],
+    "jsRules": {
+        "object-literal-sort-keys": false
+    },
+    "rules": {
+        "object-literal-sort-keys": false,
+        "interface-name": false,
+        "no-conditional-assignment": false,
+        "no-namespace": [
+            true,
+            "allow-declarations"
+        ],
+        "ban-types": false,
+        "no-bitwise": false,
+        "variable-name": {
+            "options": [
+                "allow-leading-underscore"
+            ]
+        },
+        "no-console": false
+    },
+    "rulesDirectory": []
+}
