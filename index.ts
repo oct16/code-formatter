@@ -1,1 +1,1 @@
-import './src/packages/formatter'
+import './src/packages/formatter/index.ts'

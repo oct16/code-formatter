@@ -9,22 +9,36 @@
     },
     "main": "index.js",
     "scripts": {
-        "start": "ts-node index.ts"
+        "dev": "webpack --config builder/webpack.config.dev.js",
+        "build": "webpack --config builder/webpack.config.prod.js",
+        "start": "node dist/code-formatter"
     },
     "license": "ISC",
     "devDependencies": {
         "@types/node": "^12.12.14",
         "@types/prettier": "^1.19.0",
-        "prettier": "^1.19.1",
-        "tslint-config-prettier": "^1.18.0",
         "@types/yargs": "^13.0.3",
         "chalk": "^3.0.0",
+        "clean-webpack-plugin": "^3.0.0",
         "cli-progress": "^3.4.0",
         "cli-table2": "^0.2.0",
         "ora": "^4.0.3",
+        "prettier": "^1.19.1",
+        "source-map-loader": "^0.2.4",
+        "terser-webpack-plugin": "^2.2.1",
+        "ts-loader": "^6.2.1",
         "ts-node": "^8.5.2",
+        "tslint-config-prettier": "^1.18.0",
         "typescript": "^3.7.2",
-        "yargs": "^15.0.2"
+        "webpack": "^4.41.2",
+        "webpack-cli": "^3.3.10",
+        "webpack-dev-server": "^3.9.0",
+        "webpack-merge": "^4.2.2",
+        "webpack-node-externals": "^1.7.2",
+        "yargs": "^15.0.0"
     },
-    "dependencies": {}
+    "dependencies": {},
+    "browser": {
+        "fs": false
+    }
 }

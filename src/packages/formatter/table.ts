@@ -1,5 +1,4 @@
 import chalk = require('chalk')
-
 let Table = require('cli-table2')
 
 export function createCliTable(head: string[], body: string[][]) {

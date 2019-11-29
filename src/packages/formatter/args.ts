@@ -1,10 +1,9 @@
-import argv from 'yargs'
+import yargs from 'yargs/yargs'
 import { createCliTable } from './table'
 
 export const FILE_TYPES = ['ts', 'js', 'all']
 const CHANGE_TYPES = ['cached', 'all']
-const options = argv
-
+const options = yargs()
     .option({
         file_type: {
             describe: 'Specify the file type',

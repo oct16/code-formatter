@@ -3,10 +3,9 @@ import fs from 'fs'
 import ora from 'ora'
 import path from 'path'
 import prettier from 'prettier'
-import config from '../../../config'
 const cliProgress = require('cli-progress')
 
-const prettierOptions = prettier.resolveConfig.sync(path.resolve(config.rootDir, '.prettierrc'))
+const prettierOptions = prettier.resolveConfig.sync(path.resolve(process.cwd(), '.prettierrc'))
 
 export function formatWithPrettier(files: string[]) {
     executePrettier(checkFilesIfDiff(files))

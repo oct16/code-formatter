@@ -1,2 +1,2 @@
-## CODE LINT
+## Code Formatter
 
