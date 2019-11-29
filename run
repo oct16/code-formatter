@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('./dist/code-formatter.js')
+require('./releases/code-formatter.js')

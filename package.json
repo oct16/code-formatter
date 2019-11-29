@@ -1,6 +1,6 @@
 {
     "name": "@oct16/code-formatter",
-    "version": "1.0.0",
+    "version": "1.0.4",
     "author": "oct16",
     "description": "a code automatically formatter",
     "contributes": {
@@ -11,7 +11,7 @@
     "scripts": {
         "dev": "webpack --config builder/webpack.config.dev.js",
         "build": "webpack --config builder/webpack.config.prod.js",
-        "start": "node dist/code-formatter"
+        "start": "node releases/code-formatter"
     },
     "bin": {
         "code-formatter": "run"
@@ -21,13 +21,7 @@
         "@types/node": "^12.12.14",
         "@types/prettier": "^1.19.0",
         "@types/yargs": "^13.0.3",
-        "chalk": "^3.0.0",
         "clean-webpack-plugin": "^3.0.0",
-        "cli-progress": "^3.4.0",
-        "cli-table2": "^0.2.0",
-        "ora": "^4.0.3",
-        "prettier": "^1.19.1",
-        "source-map-loader": "^0.2.4",
         "terser-webpack-plugin": "^2.2.1",
         "ts-loader": "^6.2.1",
         "ts-node": "^8.5.2",
@@ -36,11 +30,14 @@
         "webpack": "^4.41.2",
         "webpack-cli": "^3.3.10",
         "webpack-merge": "^4.2.2",
-        "webpack-node-externals": "^1.7.2",
-        "yargs": "^15.0.0"
+        "webpack-node-externals": "^1.7.2"
     },
-    "dependencies": {},
-    "browser": {
-        "fs": false
+    "dependencies": {
+        "cli-progress": "^3.4.0",
+        "cli-table2": "^0.2.0",
+        "chalk": "^3.0.0",
+        "yargs": "^15.0.0",
+        "prettier": "^1.19.1",
+        "ora": "^4.0.3"
     }
 }

@@ -5,13 +5,13 @@ module.exports = {
     entry: path.resolve(__dirname, '../src/index.ts'),
     output: {
         filename: 'code-formatter.js',
-        path: path.resolve(__dirname, '../dist')
+        path: path.resolve(__dirname, '../releases')
     },
     externals: [nodeExternals()],
     module: {
         rules: [
             {
-                test: /\.ts$/,
+                test: /\.(t|j)s$/,
                 loader: 'ts-loader',
                 exclude: /node_modules/
             }
