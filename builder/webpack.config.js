@@ -2,7 +2,7 @@ const path = require('path')
 const nodeExternals = require('webpack-node-externals')
 module.exports = {
     target: 'node',
-    entry: path.resolve(__dirname, '../index.ts'),
+    entry: path.resolve(__dirname, '../src/index.ts'),
     output: {
         filename: 'code-formatter.js',
         path: path.resolve(__dirname, '../dist')

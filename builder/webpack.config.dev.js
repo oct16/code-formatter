@@ -3,10 +3,10 @@ const merge = require('webpack-merge')
 
 const devConfig = {
     mode: 'development',
-    devServer: {
-        openPage: '',
-        historyApiFallback: true,
-        stats: 'errors-only',
+    watch: true,
+    watchOptions: {
+        aggregateTimeout: 300,
+        poll: 1000
     }
 }
 

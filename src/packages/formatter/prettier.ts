@@ -7,8 +7,10 @@ const cliProgress = require('cli-progress')
 
 const prettierOptions = prettier.resolveConfig.sync(path.resolve(process.cwd(), '.prettierrc'))
 
-export function formatWithPrettier(files: string[]) {
-    executePrettier(checkFilesIfDiff(files))
+export async function formatWithPrettier(files: string[]) {
+    await executePrettier(checkFilesIfDiff(files)).finally(() => {
+        ora('Formatted successfully').succeed()
+    })
 }
 
 async function executePrettier(files: string[]) {
@@ -30,19 +32,18 @@ async function executePrettier(files: string[]) {
         bar.start(count, 0)
 
         let pTask = Promise.resolve()
-        const wait = () => new Promise(r => setTimeout(() => r(), 200))
+        const ease = () => new Promise(r => setTimeout(() => r(), 20))
         files.forEach(filePath => {
             pTask = pTask.then(async () => {
                 await format(filePath, prettierOptions!)
-                await wait()
+                await ease()
                 bar.increment()
             })
         })
-
         await pTask
         bar.stop()
     } else {
-        ora('No files needs to be update').succeed()
+        ora('No files needs to be update').warn()
     }
 }
 
@@ -51,9 +52,12 @@ function checkFilesIfDiff(files: string[]) {
         throw new Error('Do not find a prettierc config file')
     }
 
-    return files.filter(filePath => {
+    const spinner = ora('Analyzing files').start()
+    const checkedFiles = files.filter(filePath => {
         return !checkFileIsFormatted(filePath, prettierOptions)
     })
+    spinner.succeed()
+    return checkedFiles
 }
 
 export function checkFileIsFormatted(filePath: string, options: prettier.Options) {

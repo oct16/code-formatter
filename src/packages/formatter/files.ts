@@ -18,15 +18,8 @@ export function getFiles(args: { [key: string]: string }): Promise<string[]> {
                         const fullPath = path.join(process.cwd(), itemPath)
                         return fullPath
                     })
-                    .filter(fullPath => {
-                        if (file_type !== 'all') {
-                            return fullPath.endsWith(file_type)
-                        }
 
-                        return FILE_TYPES.some(type => fullPath.endsWith(type))
-                    })
-
-                resolve(files)
+                resolve(filterByFileType(files, file_type))
             })
         } else {
             const rootDir = process.cwd()
@@ -34,12 +27,20 @@ export function getFiles(args: { [key: string]: string }): Promise<string[]> {
             const findFileMatches = file_type === 'all' ? '' : `-name '*.${file_type}'`
             const findPath = argPath ? (argPath.startsWith('/') ? argPath : `/${argPath}`) : ''
             const findSyntax = `find ${rootDir}${findPath} -type f ${findByExcludeSyntax} ${findFileMatches}`
-            // console.log(findSyntax)
 
             exec(findSyntax, (error, stdout, stderr) => {
                 const files = stdout.split('\n').filter(Boolean)
-                resolve(files)
+                resolve(filterByFileType(files, file_type))
             })
         }
+    })
+}
+
+function filterByFileType(files: string[], fileType: string) {
+    return files.filter(fullPath => {
+        if (fileType !== 'all') {
+            return fullPath.endsWith(fileType)
+        }
+        return FILE_TYPES.slice(0, FILE_TYPES.length - 1).some(type => fullPath.endsWith(type))
     })
 }
