@@ -1,9 +1,10 @@
 import chalk from 'chalk'
+// @ts-ignore
+import cliProgress from 'cli-progress'
 import fs from 'fs'
 import ora from 'ora'
 import path from 'path'
 import prettier from 'prettier'
-const cliProgress = require('cli-progress')
 
 const prettierOptions = prettier.resolveConfig.sync(path.resolve(process.cwd(), '.prettierrc'))
 

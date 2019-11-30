@@ -1,5 +1,6 @@
-import chalk = require('chalk')
-let Table = require('cli-table2')
+import chalk from 'chalk'
+// @ts-ignore
+import Table from 'cli-table2'
 
 export function createCliTable(head: string[], body: string[][]) {
     const table = new Table({
