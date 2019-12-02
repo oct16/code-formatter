@@ -1,1 +1,272 @@
-!function(e){var t={};function r(n){if(t[n])return t[n].exports;var o=t[n]={i:n,l:!1,exports:{}};return e[n].call(o.exports,o,o.exports,r),o.l=!0,o.exports}r.m=e,r.c=t,r.d=function(e,t,n){r.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:n})},r.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},r.t=function(e,t){if(1&t&&(e=r(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)r.d(n,o,function(t){return e[t]}.bind(null,o));return n},r.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return r.d(t,"a",t),t},r.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},r.p="",r(r.s=4)}([function(e,t){e.exports=require("chalk")},function(e,t){e.exports=require("ora")},function(e,t,r){"use strict";var n=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});const o=n(r(6)),i=r(7);t.FILE_TYPES=["ts","js","all"];const u=["cached","all"],a=o.default.option({file_type:{describe:"Specify the file type",demandOption:!0,default:t.FILE_TYPES[0]}}).choices("file_type",t.FILE_TYPES).option({change_type:{describe:"Specify the change type",demandOption:!0,default:u[1]}}).choices("change_type",u).option({path:{describe:"Specify the path for the files include",demandOption:!0,default:"src"}}).option({exclude:{describe:"Specify the path for the files exclude",demandOption:!0,default:"node_modules"}}).help().argv,{$0:c,_:l,...s}=a,f=Object.entries(s).reduce((e,t)=>(e.body.push(t),e),{head:["name","value"],body:[]}),{head:d,body:p}=f,h=i.createCliTable(d,p);t.default=function(){return{args:s,table:h}}},function(e,t){e.exports=require("path")},function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0}),r(5)},function(e,t,r){"use strict";var n=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});const o=n(r(0)),i=n(r(1)),u=n(r(2)),a=r(9),c=r(11);(async()=>{i.default(o.default.cyan("Use Script Options:")).start().succeed();const{args:e,table:t}=u.default();console.log(t),await a.getFiles(e).then(c.formatWithPrettier)})()},function(e,t){e.exports=require("yargs")},function(e,t,r){"use strict";var n=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});const o=n(r(0)),i=n(r(8));t.createCliTable=function(e,t){const r=new i.default({head:e.map(e=>o.default.cyan(e))});return r.push(...t),r.toString()}},function(e,t){e.exports=require("cli-table2")},function(e,t,r){"use strict";var n=this&&this.__importStar||function(e){if(e&&e.__esModule)return e;var t={};if(null!=e)for(var r in e)Object.hasOwnProperty.call(e,r)&&(t[r]=e[r]);return t.default=e,t},o=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});const i=n(r(10)),u=o(r(3)),a=r(2),{exec:c}=i;function l(e,t){return e.filter(e=>"all"!==t?e.endsWith(t):a.FILE_TYPES.slice(0,a.FILE_TYPES.length-1).some(t=>e.endsWith(t)))}t.getFiles=function(e){return new Promise(t=>{const{file_type:r,change_type:n,path:o,exclude:i}=e;if("cached"===n)c("git diff --name-only --cached",(e,n,o)=>{if(e)throw new Error(e.message);const i=n.split("\n").filter(Boolean).map(e=>{return u.default.join(process.cwd(),e)});t(l(i,r))});else{const e=process.cwd(),n=i?`! -path "${u.default.join(e,i)}/*"`:"",a="all"===r?"":`-name '*.${r}'`,s=o?o.startsWith("/")?o:`/${o}`:"";c(`find ${e}${s} -type f ${n} ${a}`,(e,n,o)=>{const i=n.split("\n").filter(Boolean);t(l(i,r))})}})}},function(e,t){e.exports=require("child_process")},function(e,t,r){"use strict";var n=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0});const o=n(r(0)),i=n(r(12)),u=n(r(13)),a=n(r(1)),c=n(r(3)),l=n(r(14)),s=l.default.resolveConfig.sync(c.default.resolve(process.cwd(),".prettierrc"));function f(e,t){const r=u.default.readFileSync(e,"utf8");try{return l.default.check(r,t)}catch(t){console.log(o.default.bgRed(e)),console.log(o.default.bgRed(t)),process.exit(1)}}t.formatWithPrettier=async function(e){await async function(e){const t=e.length,r=new i.default.SingleBar({format:o.default.cyan("|{bar}| {percentage}% | {value}/{total}"),hideCursor:!0},i.default.Presets.rect);if(t>0){a.default({text:o.default.cyan("Prettier is formatting!")}).stopAndPersist({symbol:"🧨 "}),r.start(t,0);let n=Promise.resolve();const i=()=>new Promise(e=>setTimeout(()=>e(),20));e.forEach(e=>{n=n.then(async()=>{await function(e,t){const r=u.default.readFileSync(e,"utf8"),n=l.default.format(r,t);return u.default.writeFileSync(e,n),Promise.resolve()}(e,s),await i(),r.increment()})}),await n,r.stop()}else a.default("No files needs to be update").warn()}(function(e){if(!s)throw new Error("Do not find a prettierc config file");const t=a.default("Analyzing files").start(),r=e.filter(e=>!f(e,s));return t.succeed(),r}(e)).finally(()=>{a.default("Formatted successfully").succeed()})},t.checkFileIsFormatted=f},function(e,t){e.exports=require("cli-progress")},function(e,t){e.exports=require("fs")},function(e,t){e.exports=require("prettier")}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.ts");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "./src/index.ts":
+/*!**********************!*\
+  !*** ./src/index.ts ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nObject.defineProperty(exports, \"__esModule\", { value: true });\n__webpack_require__(/*! ./packages/formatter/index.ts */ \"./src/packages/formatter/index.ts\");\n\n\n//# sourceURL=webpack:///./src/index.ts?");
+
+/***/ }),
+
+/***/ "./src/packages/formatter/args.ts":
+/*!****************************************!*\
+  !*** ./src/packages/formatter/args.ts ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst yargs_1 = __importDefault(__webpack_require__(/*! yargs */ \"yargs\"));\nconst table_1 = __webpack_require__(/*! ./table */ \"./src/packages/formatter/table.ts\");\nexports.FILE_TYPES = ['ts', 'js', 'all'];\nconst CHANGE_TYPES = ['cached', 'all'];\nconst options = yargs_1.default\n    .option({\n    file_type: {\n        describe: 'Specify the file type',\n        demandOption: true,\n        default: exports.FILE_TYPES[0]\n    }\n})\n    .choices('file_type', exports.FILE_TYPES)\n    .option({\n    change_type: {\n        describe: 'Specify the change type',\n        demandOption: true,\n        default: CHANGE_TYPES[1]\n    }\n})\n    .choices('change_type', CHANGE_TYPES)\n    .option({\n    path: {\n        describe: 'Specify the path for the files include',\n        demandOption: true,\n        default: 'src'\n    }\n})\n    .option({\n    exclude: {\n        describe: 'Specify the path for the files exclude',\n        demandOption: true,\n        default: 'node_modules'\n    }\n})\n    .help().argv;\nconst { $0, _, ...args } = options;\nconst tableData = Object.entries(args).reduce((acc, cur) => {\n    acc.body.push(cur);\n    return acc;\n}, {\n    head: ['name', 'value'],\n    body: []\n});\nconst { head, body } = tableData;\nconst tResult = table_1.createCliTable(head, body);\nfunction getArgs() {\n    return {\n        args: args,\n        table: tResult\n    };\n}\nexports.default = getArgs;\n\n\n//# sourceURL=webpack:///./src/packages/formatter/args.ts?");
+
+/***/ }),
+
+/***/ "./src/packages/formatter/files.ts":
+/*!*****************************************!*\
+  !*** ./src/packages/formatter/files.ts ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nvar __importStar = (this && this.__importStar) || function (mod) {\n    if (mod && mod.__esModule) return mod;\n    var result = {};\n    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];\n    result[\"default\"] = mod;\n    return result;\n};\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst child = __importStar(__webpack_require__(/*! child_process */ \"child_process\"));\nconst path_1 = __importDefault(__webpack_require__(/*! path */ \"path\"));\nconst args_1 = __webpack_require__(/*! ./args */ \"./src/packages/formatter/args.ts\");\nconst { exec } = child;\nfunction getFiles(args) {\n    return new Promise(resolve => {\n        const { file_type, change_type, path: argPath, exclude } = args;\n        if (change_type === 'cached') {\n            exec('git diff --name-only --cached', (error, stdout, stderr) => {\n                if (error) {\n                    throw new Error(error.message);\n                }\n                const files = stdout\n                    .split('\\n')\n                    .filter(Boolean)\n                    .map(itemPath => {\n                    const fullPath = path_1.default.join(process.cwd(), itemPath);\n                    return fullPath;\n                });\n                resolve(filterByFileType(files, file_type));\n            });\n        }\n        else {\n            const rootDir = process.cwd();\n            const findByExcludeSyntax = exclude ? `! -path \"${path_1.default.join(rootDir, exclude)}/*\"` : '';\n            const findFileMatches = file_type === 'all' ? '' : `-name '*.${file_type}'`;\n            const findPath = argPath ? (argPath.startsWith('/') ? argPath : `/${argPath}`) : '';\n            const findSyntax = `find ${rootDir}${findPath} -type f ${findByExcludeSyntax} ${findFileMatches}`;\n            exec(findSyntax, (error, stdout, stderr) => {\n                const files = stdout.split('\\n').filter(Boolean);\n                resolve(filterByFileType(files, file_type));\n            });\n        }\n    });\n}\nexports.getFiles = getFiles;\nfunction filterByFileType(files, fileType) {\n    return files.filter(fullPath => {\n        if (fileType !== 'all') {\n            return fullPath.endsWith(fileType);\n        }\n        return args_1.FILE_TYPES.slice(0, args_1.FILE_TYPES.length - 1).some(type => fullPath.endsWith(type));\n    });\n}\n\n\n//# sourceURL=webpack:///./src/packages/formatter/files.ts?");
+
+/***/ }),
+
+/***/ "./src/packages/formatter/index.ts":
+/*!*****************************************!*\
+  !*** ./src/packages/formatter/index.ts ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst chalk_1 = __importDefault(__webpack_require__(/*! chalk */ \"chalk\"));\nconst ora_1 = __importDefault(__webpack_require__(/*! ora */ \"ora\"));\nconst args_1 = __importDefault(__webpack_require__(/*! ./args */ \"./src/packages/formatter/args.ts\"));\nconst files_1 = __webpack_require__(/*! ./files */ \"./src/packages/formatter/files.ts\");\nconst prettier_1 = __webpack_require__(/*! ./prettier */ \"./src/packages/formatter/prettier.ts\");\nconst bootstrap = async () => {\n    const spinner = ora_1.default(chalk_1.default.cyan('Use Script Options:')).start();\n    spinner.succeed();\n    const { args, table } = args_1.default();\n    console.log(table);\n    await files_1.getFiles(args).then(prettier_1.formatWithPrettier);\n};\nbootstrap();\n\n\n//# sourceURL=webpack:///./src/packages/formatter/index.ts?");
+
+/***/ }),
+
+/***/ "./src/packages/formatter/options.ts":
+/*!*******************************************!*\
+  !*** ./src/packages/formatter/options.ts ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst path_1 = __importDefault(__webpack_require__(/*! path */ \"path\"));\nconst prettier_1 = __importDefault(__webpack_require__(/*! prettier */ \"prettier\"));\nexports.getPrettierOptions = () => {\n    const prettierOptions = prettier_1.default.resolveConfig.sync(path_1.default.resolve(process.cwd(), '.prettierrc'));\n    return prettierOptions;\n};\n\n\n//# sourceURL=webpack:///./src/packages/formatter/options.ts?");
+
+/***/ }),
+
+/***/ "./src/packages/formatter/prettier.ts":
+/*!********************************************!*\
+  !*** ./src/packages/formatter/prettier.ts ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst chalk_1 = __importDefault(__webpack_require__(/*! chalk */ \"chalk\"));\n// @ts-ignore\nconst cli_progress_1 = __importDefault(__webpack_require__(/*! cli-progress */ \"cli-progress\"));\nconst fs_1 = __importDefault(__webpack_require__(/*! fs */ \"fs\"));\nconst ora_1 = __importDefault(__webpack_require__(/*! ora */ \"ora\"));\nconst prettier_1 = __importDefault(__webpack_require__(/*! prettier */ \"prettier\"));\nconst options_1 = __webpack_require__(/*! ./options */ \"./src/packages/formatter/options.ts\");\nconst prettierOptions = options_1.getPrettierOptions();\nasync function formatWithPrettier(files) {\n    await executePrettier(await checkFilesIfDiff(files));\n}\nexports.formatWithPrettier = formatWithPrettier;\nasync function executePrettier(files) {\n    const count = files.length;\n    const bar = new cli_progress_1.default.SingleBar({\n        format: chalk_1.default.cyan('|{bar}| {percentage}% | {value}/{total}'),\n        hideCursor: true,\n        clearOnComplete: true\n    }, cli_progress_1.default.Presets.rect);\n    if (count > 0) {\n        bar.start(count, 0);\n        let pTask = Promise.resolve();\n        const ease = () => new Promise(r => setTimeout(() => r(), 20));\n        files.forEach(filePath => {\n            pTask = pTask.then(async () => {\n                await format(filePath, prettierOptions);\n                await ease();\n                bar.increment();\n            });\n        });\n        await pTask;\n        bar.stop();\n        ora_1.default(`Success! Formatted ${count} files`).succeed();\n    }\n    else {\n        ora_1.default('No files needs to be update').warn();\n    }\n}\nasync function checkFilesIfDiff(files) {\n    const spinner = ora_1.default('Analyzing files...').start();\n    await new Promise(r => setTimeout(() => r(), 1000));\n    spinner.succeed(`Found ${files.length} files`);\n    const bar = new cli_progress_1.default.SingleBar({\n        format: chalk_1.default.cyan('|{bar}| {percentage}% | {value}/{total}'),\n        hideCursor: true,\n        clearOnComplete: true\n    }, cli_progress_1.default.Presets.rect);\n    bar.start(files.length, 0);\n    if (!prettierOptions) {\n        throw new Error('Do not find a prettierc config file');\n    }\n    const ease = () => Promise.resolve();\n    const checkedFiles = [];\n    for (const filePath of await Promise.resolve(files)) {\n        await ease();\n        const formatted = checkFileIsFormatted(filePath, prettierOptions);\n        bar.increment();\n        if (!formatted) {\n            checkedFiles.push(filePath);\n        }\n    }\n    bar.stop();\n    spinner.succeed('Analyzed files');\n    process.stdout.write('\\r\\x1b[K');\n    return checkedFiles;\n}\nfunction checkFileIsFormatted(filePath, options) {\n    const file = fs_1.default.readFileSync(filePath, 'utf8');\n    try {\n        const isFormated = prettier_1.default.check(file, options);\n        return isFormated;\n    }\n    catch (error) {\n        console.log(chalk_1.default.bgRed(filePath));\n        console.log(chalk_1.default.bgRed(error));\n        process.exit(1);\n    }\n}\nexports.checkFileIsFormatted = checkFileIsFormatted;\nfunction format(filePath, options) {\n    const file = fs_1.default.readFileSync(filePath, 'utf8');\n    const formated = prettier_1.default.format(file, options);\n    fs_1.default.writeFileSync(filePath, formated);\n    return Promise.resolve();\n}\n\n\n//# sourceURL=webpack:///./src/packages/formatter/prettier.ts?");
+
+/***/ }),
+
+/***/ "./src/packages/formatter/table.ts":
+/*!*****************************************!*\
+  !*** ./src/packages/formatter/table.ts ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", { value: true });\nconst chalk_1 = __importDefault(__webpack_require__(/*! chalk */ \"chalk\"));\n// @ts-ignore\nconst cli_table2_1 = __importDefault(__webpack_require__(/*! cli-table2 */ \"cli-table2\"));\nfunction createCliTable(head, body) {\n    const table = new cli_table2_1.default({\n        head: head.map(val => chalk_1.default.cyan(val))\n    });\n    table.push(...body);\n    return table.toString();\n}\nexports.createCliTable = createCliTable;\n\n\n//# sourceURL=webpack:///./src/packages/formatter/table.ts?");
+
+/***/ }),
+
+/***/ "chalk":
+/*!************************!*\
+  !*** external "chalk" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"chalk\");\n\n//# sourceURL=webpack:///external_%22chalk%22?");
+
+/***/ }),
+
+/***/ "child_process":
+/*!********************************!*\
+  !*** external "child_process" ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"child_process\");\n\n//# sourceURL=webpack:///external_%22child_process%22?");
+
+/***/ }),
+
+/***/ "cli-progress":
+/*!*******************************!*\
+  !*** external "cli-progress" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"cli-progress\");\n\n//# sourceURL=webpack:///external_%22cli-progress%22?");
+
+/***/ }),
+
+/***/ "cli-table2":
+/*!*****************************!*\
+  !*** external "cli-table2" ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"cli-table2\");\n\n//# sourceURL=webpack:///external_%22cli-table2%22?");
+
+/***/ }),
+
+/***/ "fs":
+/*!*********************!*\
+  !*** external "fs" ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"fs\");\n\n//# sourceURL=webpack:///external_%22fs%22?");
+
+/***/ }),
+
+/***/ "ora":
+/*!**********************!*\
+  !*** external "ora" ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"ora\");\n\n//# sourceURL=webpack:///external_%22ora%22?");
+
+/***/ }),
+
+/***/ "path":
+/*!***********************!*\
+  !*** external "path" ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"path\");\n\n//# sourceURL=webpack:///external_%22path%22?");
+
+/***/ }),
+
+/***/ "prettier":
+/*!***************************!*\
+  !*** external "prettier" ***!
+  \***************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"prettier\");\n\n//# sourceURL=webpack:///external_%22prettier%22?");
+
+/***/ }),
+
+/***/ "yargs":
+/*!************************!*\
+  !*** external "yargs" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"yargs\");\n\n//# sourceURL=webpack:///external_%22yargs%22?");
+
+/***/ })
+
+/******/ });

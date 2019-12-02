@@ -3,15 +3,13 @@ import chalk from 'chalk'
 import cliProgress from 'cli-progress'
 import fs from 'fs'
 import ora from 'ora'
-import path from 'path'
 import prettier from 'prettier'
+import { getPrettierOptions } from './options'
 
-const prettierOptions = prettier.resolveConfig.sync(path.resolve(process.cwd(), '.prettierrc'))
+const prettierOptions = getPrettierOptions()
 
 export async function formatWithPrettier(files: string[]) {
-    await executePrettier(checkFilesIfDiff(files)).finally(() => {
-        ora('Formatted successfully').succeed()
-    })
+    await executePrettier(await checkFilesIfDiff(files))
 }
 
 async function executePrettier(files: string[]) {
@@ -19,17 +17,13 @@ async function executePrettier(files: string[]) {
     const bar = new cliProgress.SingleBar(
         {
             format: chalk.cyan('|{bar}| {percentage}% | {value}/{total}'),
-            hideCursor: true
+            hideCursor: true,
+            clearOnComplete: true
         },
         cliProgress.Presets.rect
     )
 
     if (count > 0) {
-        ora({
-            text: chalk.cyan('Prettier is formatting!')
-        }).stopAndPersist({
-            symbol: '🧨 '
-        })
         bar.start(count, 0)
 
         let pTask = Promise.resolve()
@@ -43,21 +37,44 @@ async function executePrettier(files: string[]) {
         })
         await pTask
         bar.stop()
+        ora(`Success! Formatted ${count} files`).succeed()
     } else {
         ora('No files needs to be update').warn()
     }
 }
 
-function checkFilesIfDiff(files: string[]) {
+async function checkFilesIfDiff(files: string[]) {
+    const spinner = ora('Analyzing files...').start()
+
+    await new Promise(r => setTimeout(() => r(), 1000))
+    spinner.succeed(`Found ${files.length} files`)
+
+    const bar = new cliProgress.SingleBar(
+        {
+            format: chalk.cyan('|{bar}| {percentage}% | {value}/{total}'),
+            hideCursor: true,
+            clearOnComplete: true
+        },
+        cliProgress.Presets.rect
+    )
+    bar.start(files.length, 0)
+
     if (!prettierOptions) {
         throw new Error('Do not find a prettierc config file')
     }
-
-    const spinner = ora('Analyzing files').start()
-    const checkedFiles = files.filter(filePath => {
-        return !checkFileIsFormatted(filePath, prettierOptions)
-    })
-    spinner.succeed()
+    const ease = () => Promise.resolve()
+    const checkedFiles = []
+    for (const filePath of await Promise.resolve(files)) {
+        await ease()
+        const formatted = checkFileIsFormatted(filePath, prettierOptions)
+        bar.increment()
+        if (!formatted) {
+            checkedFiles.push(filePath)
+        }
+    }
+    bar.stop()
+    spinner.succeed('Analyzed files')
+    process.stdout.write('\r\x1b[K')
     return checkedFiles
 }
 
