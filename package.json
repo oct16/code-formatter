@@ -1,6 +1,6 @@
 {
     "name": "@oct16/code-formatter",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "author": "oct16",
     "description": "a code automatically formatter",
     "contributes": {
@@ -17,6 +17,10 @@
         "code-formatter": "run"
     },
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/oct16/code-formatter.git"
+    },
     "devDependencies": {
         "@types/node": "^12.12.14",
         "@types/prettier": "^1.19.0",
@@ -33,11 +37,12 @@
         "webpack-node-externals": "^1.7.2"
     },
     "dependencies": {
-        "cli-progress": "^3.4.0",
-        "cli-table2": "^0.2.0",
         "chalk": "^3.0.0",
-        "yargs": "^15.0.0",
+        "cli-progress": "^3.4.0",
+        "cli-table3": "^0.5.1",
+        "ora": "^4.0.3",
         "prettier": "^1.19.1",
-        "ora": "^4.0.3"
+        "tslint": "^5.20.1",
+        "yargs": "^15.0.0"
     }
 }

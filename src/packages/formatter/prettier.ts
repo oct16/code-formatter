@@ -6,8 +6,6 @@ import ora from 'ora'
 import prettier from 'prettier'
 import { getPrettierOptions } from './options'
 
-const prettierOptions = getPrettierOptions()
-
 export async function formatWithPrettier(files: string[]) {
     await executePrettier(await checkFilesIfDiff(files))
 }
@@ -30,7 +28,8 @@ async function executePrettier(files: string[]) {
         const ease = () => new Promise(r => setTimeout(() => r(), 20))
         files.forEach(filePath => {
             pTask = pTask.then(async () => {
-                await format(filePath, prettierOptions!)
+                const type = filePath.match(/\.[^\.]+$/)![0]
+                await format(filePath, getPrettierOptions(type)!)
                 await ease()
                 bar.increment()
             })
@@ -59,14 +58,15 @@ async function checkFilesIfDiff(files: string[]) {
     )
     bar.start(files.length, 0)
 
-    if (!prettierOptions) {
+    if (!getPrettierOptions()) {
         throw new Error('Do not find a prettierc config file')
     }
     const ease = () => Promise.resolve()
     const checkedFiles = []
     for (const filePath of await Promise.resolve(files)) {
         await ease()
-        const formatted = checkFileIsFormatted(filePath, prettierOptions)
+        const type = filePath.match(/\.[^\.]+$/)![0]        
+        const formatted = checkFileIsFormatted(filePath, getPrettierOptions(type))
         bar.increment()
         if (!formatted) {
             checkedFiles.push(filePath)
@@ -84,8 +84,8 @@ export function checkFileIsFormatted(filePath: string, options: prettier.Options
         const isFormated = prettier.check(file, options)
         return isFormated
     } catch (error) {
-        console.log(chalk.bgRed(filePath))
-        console.log(chalk.bgRed(error))
+        console.log(`\n${chalk.red(filePath)}`)
+        console.log(chalk.red(error))
         process.exit(1)
     }
 }

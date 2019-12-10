@@ -41,6 +41,6 @@ function filterByFileType(files: string[], fileType: string) {
         if (fileType !== 'all') {
             return fullPath.endsWith(fileType)
         }
-        return FILE_TYPES.slice(0, FILE_TYPES.length - 1).some(type => fullPath.endsWith(type))
+        return FILE_TYPES.slice(1, FILE_TYPES.length).some(type => fullPath.endsWith(type))
     })
 }

@@ -1,8 +1,8 @@
 import yargs from 'yargs'
 import { createCliTable } from './table'
 
-export const FILE_TYPES = ['ts', 'js', 'all']
-const CHANGE_TYPES = ['cached', 'all']
+export const FILE_TYPES = ['all', 'ts', 'js', 'vue']
+const CHANGE_TYPES = ['all', 'cached']
 const options = yargs
     .option({
         file_type: {
@@ -17,7 +17,7 @@ const options = yargs
         change_type: {
             describe: 'Specify the change type',
             demandOption: true,
-            default: CHANGE_TYPES[1]
+            default: CHANGE_TYPES[0]
         }
     })
     .choices('change_type', CHANGE_TYPES)
