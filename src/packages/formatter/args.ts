@@ -41,6 +41,7 @@ const options = yargs
     .help().argv
 
 const { $0, _, ...args } = options
+process.env.__path = args.path
 const tableData = Object.entries(args).reduce(
     (acc, cur) => {
         acc.body.push(cur as string[])
