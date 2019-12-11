@@ -7,7 +7,7 @@ export const getPrettierOptions = (fileSuffix?: string) => {
     let parser: string = 'typescript'
     switch (fileSuffix) {
         case '.js':
-            parser = 'babylon'
+            parser = 'babel'
             break
         case '.vue':
             parser = 'vue'

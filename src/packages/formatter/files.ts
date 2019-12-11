@@ -23,9 +23,9 @@ export function getFiles(args: { [key: string]: string }): Promise<string[]> {
             })
         } else {
             const rootDir = process.cwd()
-            const findByExcludeSyntax = exclude ? `! -path "${path.join(rootDir, exclude)}/*"` : ''
-            const findFileMatches = file_type === 'all' ? '' : `-name '*.${file_type}'`
             const findPath = argPath ? (argPath.startsWith('/') ? argPath : `/${argPath}`) : ''
+            const findByExcludeSyntax = exclude ? `! -path "${path.join(rootDir, findPath, exclude)}/*"` : ''
+            const findFileMatches = file_type === 'all' ? '' : `-name '*.${file_type}'`
             const findSyntax = `find ${rootDir}${findPath} -type f ${findByExcludeSyntax} ${findFileMatches}`
 
             exec(findSyntax, (error, stdout, stderr) => {
