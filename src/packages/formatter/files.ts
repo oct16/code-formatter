@@ -1,15 +1,15 @@
 import * as child from 'child_process'
 import path from 'path'
+import { exec } from 'shelljs'
 import { FILE_TYPES } from './args'
-const { exec } = child
 
 export function getFiles(args: { [key: string]: string }): Promise<string[]> {
     return new Promise(resolve => {
         const { file_type, change_type, path: argPath, exclude } = args
         if (change_type === 'cached') {
-            exec('git diff --name-only --cached', (error, stdout, stderr) => {
-                if (error) {
-                    throw new Error(error.message)
+            exec('git diff --name-only --cached', { silent: true }, (code, stdout, stderr) => {
+                if (stderr) {
+                    throw new Error(stderr)
                 }
                 const files = stdout
                     .split('\n')
@@ -27,8 +27,7 @@ export function getFiles(args: { [key: string]: string }): Promise<string[]> {
             const findByExcludeSyntax = exclude ? `! -path "${path.join(rootDir, findPath, exclude)}/*"` : ''
             const findFileMatches = file_type === 'all' ? '' : `-name '*.${file_type}'`
             const findSyntax = `find ${rootDir}${findPath} -type f ${findByExcludeSyntax} ${findFileMatches}`
-
-            exec(findSyntax, (error, stdout, stderr) => {
+            exec(findSyntax, { silent: true }, (code, stdout, stderr) => {
                 const files = stdout.split('\n').filter(Boolean)
                 resolve(filterByFileType(files, file_type))
             })
