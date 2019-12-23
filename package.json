@@ -1,6 +1,6 @@
 {
     "name": "@oct16/code-formatter",
-    "version": "1.0.7",
+    "version": "1.0.9",
     "author": "oct16",
     "description": "a code automatically formatter",
     "contributes": {
