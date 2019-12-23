@@ -8,6 +8,13 @@ module.exports = {
         path: path.resolve(__dirname, '../releases')
     },
     externals: [nodeExternals()],
+    stats: {
+        colors: true,
+        modules: false,
+        children: false,
+        chunks: false,
+        chunkModules: false
+    },
     module: {
         rules: [
             {
